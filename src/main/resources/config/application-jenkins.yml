@@ -1,0 +1,66 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: '${ALLEGRO_AUTH0_JWKS}'
+  redis:
+    url: '${REDIS_URL}'
+    ssl: '${ENABLE_REDIS_SSL}'
+  elastic:
+    apm:
+      server_url: '${ELASTIC_APM_SERVER_URL}'
+      secret_token: '${ELASTIC_APM_SECRET_TOKEN}'
+      enabled: '${EVENTSERVICE_ELASTIC_APM_ENABLED}'
+      environment: '${DEPLOYMENT}'
+
+logging:
+  level:
+    root: '${EVENTSERVICE_LOG_LEVEL:INFO}'
+
+service:
+  falcon:
+    uri: '${FALCON_URL}'
+    appName: '${FALCON_APP_NAME}'
+    appKey: '${FALCON_APP_TOKEN}'
+  analytics:
+    uri: '${ANALYTICS_URL}'
+    appKey: '${ANALYTICS_API_KEY}'
+    successUrl: '${ANALYTICS_SUCCESS_URL}'
+  de:
+    uri: '${DIALOGENGINES_URL}'
+  lobby:
+    uri: '${LOBBY_URL}'
+    appKey: '${LOBBY_API_KEY}'
+  amazonBadging:
+    uri: '${BADGING_URI}'
+    enabled: '${IS_AMAZON_BADGE_ENABLED}'
+  emailClient:
+    uri: '${EMAILCLIENT_URL}'
+    appKey: '${EMAIL_CLIENT_API_KEY}'
+  nlu:
+    uri: '${CONCERTONLP_URL}'
+    appKey: '${CONCERTONLP_API_KEY}'
+  seren:
+    uri: '${SERENE_URL}'
+    appKey: '${SERENE_API_KEY}'
+  krishna:
+    uri: '${KRISHNA_URL}'
+  telephony:
+    uri: '${EVENTSERVICE_TELEPHONY_URL}'
+  eventservice:
+    uri: '${EVENTSERVICE_TELEPHONY_URL}'
+  base:
+     uri: '${BASE_URL}'
+  ripples:
+    uri: '${RIPPLES_URL}'
+    appKey: '${RIPPLES_API_KEY}'
+
+twilio:
+  accountSid: '${EVENTSERVICE_TWILIO_ACCOUNT_SID}'
+  authToken: '${EVENTSERVICE_TWILIO_AUTH_TOKEN}'
+  appSid: '${EVENTSERVICE_TWILIO_APP_SID}'
+  apiKeySid: '${EVENTSERVICE_TWILIO_API_KEY_SID}'
+  apiKeySecret: '${EVENTSERVICE_TWILIO_API_KEY_SECRET}'
+  number: '${EVENTSERVICE_TWILIO_NUMBER}'
+  phoneNumber: '${EVENTSERVICE_TWILIO_NUMBER}'

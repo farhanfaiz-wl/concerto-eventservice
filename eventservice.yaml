@@ -1,0 +1,77 @@
+---
+- hosts: servers
+  become: yes
+  become_user: root
+  gather_facts: False
+  remote_user: ubuntu
+  vars:
+      base_image: "image"
+      container_name: eventservice
+      aws_ecr_login_repository: 607531355752.dkr.ecr.us-east-1.amazonaws.com  
+      dev_secrets: /tmp/"{{container_name}}"
+      cpu_shares: "512"
+      memory: "2g"
+  tasks:
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+       src: "{{container_name}}"
+       dest: /tmp/"{{container_name}}"
+
+    - name: Stop the running container
+      ansible.builtin.shell: docker stop "{{container_name}}" || /bin/true
+
+    - name: Remove the running container
+      # TODO use variable container_name
+      ansible.builtin.shell: docker rm "{{container_name}}" || /bin/true
+
+    - name: Pull an image
+      docker_image:
+        name: "{{base_image}}"
+        source: pull
+        force_source: yes
+      become_user: ubuntu
+      tags: download
+
+    - name: Deploying the service
+      docker_container:
+          name: "{{container_name}}"
+          image: "{{base_image}}"
+          state: started
+          restart_policy: unless-stopped
+          detach: yes
+          restart: yes
+          #cpu_shares: "{{cpu_shares}}"
+          memory: "{{memory}}"
+          #memory_swap: unlimited
+          published_ports:
+              - 9090:9090
+              - 9091:9091
+          env_file: "{{dev_secrets}}"
+      tags: production
+     
+    - name: Deploying the service for amazon
+      docker_container:
+          name: "{{container_name}}"
+          image: "{{base_image}}"
+          log_driver: awslogs
+          log_options:
+              awslogs-region: us-east-1
+              awslogs-group: /aws/ec2/amazon-eventservice
+              mode: non-blocking
+          state: started
+          restart_policy: unless-stopped
+          detach: yes
+          restart: yes
+          #cpu_shares: "{{cpu_shares}}"
+          memory: "{{memory}}"
+          #memory_swap: unlimited
+          published_ports:
+              - 9090:9090
+              - 9091:9091
+          env_file: "{{dev_secrets}}"
+      tags: amazon 
+
+    - name: Remove the script if it exists
+      file:
+         state: absent
+         path: "{{dev_secrets}}"

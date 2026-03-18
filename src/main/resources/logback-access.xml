@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
+      <fieldNames>
+        <requestHeaders>request_headers</requestHeaders>
+        <responseHeaders>response_headers</responseHeaders>
+      </fieldNames>
+      <customFields>{"component_id":"11","component_name":"eventservice","component_version":"0.1"}</customFields>
+    </encoder>
+  </appender>
+
+  <springProfile name = "default">
+    <appender-ref ref="console" />
+  </springProfile>
+
+  <springProfile name = "jenkins">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
+                <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+                <appendLineSeparator>true</appendLineSeparator>
+            </layout>
+        </appender>
+    <appender-ref ref="console" />
+  </springProfile>
+
+</configuration>

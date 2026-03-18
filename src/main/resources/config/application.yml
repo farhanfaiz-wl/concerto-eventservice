@@ -1,0 +1,130 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://login.concerto.ai/.well-known/jwks.json
+  jackson:
+   serialization:
+     FAIL_ON_EMPTY_BEANS: false
+  application:
+    name: EventService
+  redis:
+    url: 'redis://localhost:6379'
+    cache:
+      ttl: 30
+    ssl: false
+    stream:
+      consumer-group: 'eventservice'
+      log:
+        key: 'events'
+      internal:
+        key: 'event:user'
+      chatbot:
+        key: 'event:chatbot'
+      auth-code:
+        key: 'event:auth_code'
+      analytics:
+        agent_msgs:
+          key: 'analytics:agent:msgs'
+        chat_event:
+          key: 'analytics:chat_event'
+        turn_logs:
+          key: 'analytics:turnlog'
+        form_slot:
+          key: 'analytics:form_slot'
+        quiz:
+          key: 'analytics:quiz'
+        ticket:
+          key: 'analytics:ticket_session'
+        error_logs:
+          key: 'analytics:error_log'
+        push_msgs:
+          key: 'eventservice:push_message'
+        inbox_v1_conversations:
+          key: 'inbox_agent:conversations' 
+        inbox_v1_conversations_list:
+          key: 'inbox_agent:conversations_list'
+        inbox_conversations:
+          key: 'CONVERSATIONS' 
+        inbox_conversations_list:
+          key: 'CONVERSATION_TURNS'
+    pubsub:
+      channel:
+        chatbot: 'event:chatbot'
+
+server:
+  port: 9090
+  error:
+    include-message: 'always'
+  servlet:
+    context-path: '/'
+
+auth:
+  header:
+    api-token: 'X-API-TOKEN'
+
+service:
+  falcon:
+    uri: 'http://52.86.16.23:8090'
+    appName: dgi-app
+    appKey: vq345f235g4qer
+    enabled: true
+  analytics:
+    uri: 'http://52.86.16.23:3120'
+    appName: ''
+    appKey: analytics
+    successUrl: "https://concerto.co.in/feedback/success"
+    enabled: true
+
+  seren:
+    uri: 'http://52.86.16.23:3872'
+    appName: 'seren'
+    appKey: seren@jeb;h
+    enabled: true
+  de:
+    uri: 'http://52.86.16.23:6565'
+    appName: ''
+    appKey: ''
+    enabled: true
+  lobby:
+    uri: 'http://52.86.16.23:9080'
+    appKey: 'lobby'
+    enabled: true
+  amazonBadging:
+    uri: 'http://52.86.16.23:9600'
+    appName: ''
+    appKey: ''
+    enabled: true
+  emailClient:
+    uri: http://52.86.16.23:9587
+    appKey: 'email-client'
+    enabled: true
+  nlu:
+    uri: "http://52.86.16.23:3128"
+    appKey: "${NLU_APP_KEY:}"
+  krishna:
+    uri: "http://52.86.16.23:9588"
+    enabled: true
+  telephony:
+    uri: "https://e41e-27-34-60-95.ngrok-free.app"
+  eventservice:
+    uri: "https://2d56-59-93-28-26.in.ngrok.io"
+  base:
+     uri: "http://52.86.16.23:9592"
+  ripples:
+     uri: "http://52.86.16.23:9592"
+     appKey: 'ripples'
+     
+      
+  
+
+twilio:
+  accountSid: "${TWILIO_ACCOUNT_SID:}"
+  authToken: "${TWILIO_AUTH_TOKEN:}"
+  appSid: "${TWILIO_APP_SID:}"
+  apiKeySid: "${TWILIO_API_KEY_SID:}"
+  apiKeySecret: "${TWILIO_API_KEY_SECRET:}"
+  number: "${TWILIO_NUMBER:}"
+  phoneNumber: "${TWILIO_PHONE_NUMBER:}"
+
